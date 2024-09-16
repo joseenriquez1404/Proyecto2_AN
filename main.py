@@ -16,7 +16,8 @@ def leer_expresion():
     return expression
 
 def menu():
-    print("1. Metodo Newton Raphson")
+    print("1. Método Newton Raphson")
+    print("2. Método Newton Raphson Mejorado")
     print("7. Salir")
 
 def Newton_Raphson():
@@ -38,7 +39,14 @@ def Newton_Raphson():
 
     while (error > error_deseado) and (iteraciones <= max_iteraciones):
         #Se obtiene el valor 
-        raiz_x = raiz_n - ((expression.subs(x, raiz_n)) / derivate.subs(x, raiz_n)) 
+        numerador = (expression.subs(x, raiz_n))
+        denominador = derivate.subs(x, raiz_n)
+
+        if denominador == 0:
+            print("El denominador vale cero. No se puede continuar con el método")
+            return
+
+        raiz_x = raiz_n - (numerador / denominador) 
         error = abs((raiz_x - raiz_n)/raiz_x) * 100
         raiz_n = raiz_x
 
@@ -66,6 +74,10 @@ def Newton_Raphson_Mejorado():
     while (error > error_deseado) and (iteraciones <= max_iteraciones):
         numerador = expresion.subs(x, raiz_n)*primera_derivada.subs(x, raiz_n)
         denominador = (primera_derivada.subs(x, raiz_n))**2 - (expresion.subs(x, raiz_n)*(segunda_derivada.subs(x, raiz_n)))
+
+        if denominador == 0:
+            print("El denominador vale cero, no se puede continuar con el método")
+            return
 
         raiz_x = raiz_n - (numerador/denominador)
         error = abs((raiz_x - raiz_n) / raiz_x) * 100
