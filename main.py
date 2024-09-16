@@ -17,6 +17,7 @@ def leer_expresion():
 
 def menu():
     print("1. Metodo Newton Raphson")
+    print("7. Salir")
 
 def Newton_Raphson():
 
