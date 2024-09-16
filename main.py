@@ -32,15 +32,48 @@ def Newton_Raphson():
     error = 100
     raiz_n = float(input("Ingresa el valor inicial: "))
     raiz_x = 0.0 #Este es el valor de x_n+1
+    iteraciones = 0
+    max_iteraciones = 1000
 
 
-    while (error > error_deseado):
+    while (error > error_deseado) and (iteraciones <= max_iteraciones):
         #Se obtiene el valor 
         raiz_x = raiz_n - ((expression.subs(x, raiz_n)) / derivate.subs(x, raiz_n)) 
         error = abs((raiz_x - raiz_n)/raiz_x) * 100
         raiz_n = raiz_x
 
+        if iteraciones == max_iteraciones:
+            print("Se alcanzo el limite de iteraciones (1000) y no ha convergido la función")
+
     print(f"Una buena aproximacion a la solucion con un porcentaje de error {error_deseado} es {raiz_x} ")
+
+def Newton_Raphson_Mejorado():
+    x = symbols("x")
+
+    expresion = leer_expresion()
+
+    #Se obtienen las derivadas
+    primera_derivada = diff(expresion, x)
+    segunda_derivada = diff(expresion, x, 2)
+
+    error = 100.0
+    error_deseado = float(input("Ingresa el error deseado: "))
+    raiz_n = float(input("Ingresa el valor inicial del x: "))
+    raiz_x = 0
+    iteraciones = 0
+    max_iteraciones = 1000
+
+    while (error > error_deseado) and (iteraciones <= max_iteraciones):
+        numerador = expresion.subs(x, raiz_n)*primera_derivada.subs(x, raiz_n)
+        denominador = (primera_derivada.subs(x, raiz_n))**2 - (expresion.subs(x, raiz_n)*(segunda_derivada.subs(x, raiz_n)))
+
+        raiz_x = raiz_n - (numerador/denominador)
+        error = abs((raiz_x - raiz_n) / raiz_x) * 100
+        raiz_n = raiz_x
+
+        if iteraciones == max_iteraciones:
+            print("Se ha alcanzo el limite de iteraciones")
+    print("Una buena aproximacion con un error menor al ", error, "es", raiz_x)
 
 
 continuar = True
@@ -50,5 +83,7 @@ while continuar:
     opcion = int(input("Ingresa una opcion: "))
     if opcion == 1:
         Newton_Raphson()
+    elif opcion == 2:
+        Newton_Raphson_Mejorado()
     if opcion == 7:
         continuar = False
