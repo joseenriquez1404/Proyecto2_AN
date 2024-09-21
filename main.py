@@ -17,7 +17,6 @@ def leer_expresion():
     return expression
 
 def menu():
-    os.system("cls")
     print("1. Método Newton Raphson")
     print("2. Método Newton Raphson Mejorado")
     print("7. Salir")
@@ -101,8 +100,10 @@ while continuar:
     menu()
     opcion = int(input("Ingresa una opcion: "))
     if opcion == 1:
+        os.system("cls")
         Newton_Raphson()
     elif opcion == 2:
+        os.system("cls")
         Newton_Raphson_Mejorado()
     if opcion == 7:
         continuar = False
