@@ -1,4 +1,5 @@
 from sympy import symbols, sympify, diff, Subs
+import os
 
 #Se crea los simbolos que vamos a ocupar
 
@@ -16,6 +17,7 @@ def leer_expresion():
     return expression
 
 def menu():
+    os.system("cls")
     print("1. Método Newton Raphson")
     print("2. Método Newton Raphson Mejorado")
     print("7. Salir")
@@ -28,6 +30,7 @@ def Newton_Raphson():
 
     #Se obtiene la derivada de la expresión
     derivate = diff(expression, x)
+    segunda_derivada = diff(expression, x, 2)
 
     error_deseado = int(input("Ingresa el error deseado en porcentaje: "))
     error = 100
@@ -36,24 +39,28 @@ def Newton_Raphson():
     iteraciones = 0
     max_iteraciones = 1000
 
+    numerador_criterio = expression.subs(x, raiz_n) * segunda_derivada.subs(x, raiz_n)
+    denominador_criterio = (derivate.subs(x, raiz_n))**2
 
-    while (error > error_deseado) and (iteraciones <= max_iteraciones):
-        #Se obtiene el valor 
-        numerador = (expression.subs(x, raiz_n))
-        denominador = derivate.subs(x, raiz_n)
+    criterio = abs(numerador_criterio/denominador_criterio)
 
-        if denominador == 0:
-            print("El denominador vale cero. No se puede continuar con el método")
-            return
+    if criterio < 1:
+        while (error > error_deseado):
+            #Se obtiene el valor 
+            numerador = (expression.subs(x, raiz_n))
+            denominador = derivate.subs(x, raiz_n)
 
-        raiz_x = raiz_n - (numerador / denominador) 
-        error = abs((raiz_x - raiz_n)/raiz_x) * 100
-        raiz_n = raiz_x
+            if denominador == 0:
+                print("El denominador vale cero. No se puede continuar con el método")
+                return
 
-        if iteraciones == max_iteraciones:
-            print("Se alcanzo el limite de iteraciones (1000) y no ha convergido la función")
+            raiz_x = raiz_n - (numerador / denominador) 
+            error = abs((raiz_x - raiz_n)/raiz_x) * 100
+            raiz_n = raiz_x
 
-    print(f"Una buena aproximacion a la solucion con un porcentaje de error {error_deseado} es {raiz_x} ")
+        print(f"Una buena aproximacion a la solucion con un porcentaje de error {error_deseado} es {raiz_x} ")
+    else:
+        print("La función no converge en el punto dado")
 
 def Newton_Raphson_Mejorado():
     x = symbols("x")
